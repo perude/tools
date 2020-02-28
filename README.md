@@ -37,5 +37,5 @@ $ kubectl get po
 $ kubectl tools-on name-of-pod
 ```
 after that command, it should login you into bash on name-of-pod pod, then just call any supported tool:
-> ps 
-> top
+- ps 
+- top
