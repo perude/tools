@@ -4,10 +4,13 @@ if [ -n "$1" ]
   then
       if [ -d "/opt/k8s/tools" ]
          then
-	     echo "cp libs"
-	     kubectl cp "/opt/k8s/tools/lib" "$1:/tmp"
+	     lib_path=$(readlink '/opt/k8s/tools/lib')
+	     echo "cp libs from $lib_path"
+	     kubectl cp "$lib_path" "$1:/tmp"
 	     echo "cp bin"
-             kubectl cp "/opt/k8s/tools/bin" "$1:/tmp"
+	     bin_path=$(readlink '/opt/k8s/tools/bin')
+	     echo "cp bin from $bin_path"
+             kubectl cp "$bin_path" "$1:/tmp"
 	     echo "set env variables and login into bash on following pod: $1"
 	     kubectl exec -ti "$1" -- bash -c "export LD_LIBRARY_PATH='/tmp/lib'; export PATH='$PATH:/tmp/bin'; bash"
 	     echo "cleaning pod ... remove lib and bin folders"
