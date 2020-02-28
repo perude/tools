@@ -2,15 +2,17 @@
 echo "script was invoked with $1 param (it should be name of pod, on which you want to execute tools)"
 if [ -n "$1" ]
   then
-      if [ -n "$tools_folder" ]
+      if [ -d "/opt/k8s/tools" ]
          then
 	     echo "cp libs"
-	     kubectl cp "$tools_folder/lib" "$1:/opt/hybris/"
+	     kubectl cp "/opt/k8s/tools/lib" "$1:/tmp"
 	     echo "cp bin"
-             kubectl cp "$tools_folder/bin" "$1:/opt/hybris/"
+             kubectl cp "/opt/k8s/tools/bin" "$1:/tmp"
 	     echo "set env variables and login into bash on following pod: $1"
-	     kubectl exec -ti "$1" -- bash -c "export LD_LIBRARY_PATH='/opt/hybris/lib'; export PATH='$PATH:/opt/hybris/bin'; bash"
-      else
-         echo "you have to define env variable tools_folder, which should point to folder with 'bin' and 'libs'"
+	     kubectl exec -ti "$1" -- bash -c "export LD_LIBRARY_PATH='/tmp/lib'; export PATH='$PATH:/tmp/bin'; bash"
+	     echo "cleaning pod ... remove lib and bin folders"
+	     kubectl exec "$1" -- bash -c "rm -r /tmp/bin; rm -r /tmp/lib"
+	else
+	     echo "folder '/opt/k8s/tools' doesn't exists, please rerun installation script"
       fi
 fi
