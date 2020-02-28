@@ -1,0 +1,16 @@
+#!/bin/bash
+echo "script was invoked with $1 param (it should be name of pod, on which you want to execute tools)"
+if [ -n "$1" ]
+  then
+      if [ -n "$tools_folder" ]
+         then
+	     echo "cp libs"
+	     kubectl cp "$tools_folder/lib" "$1:/opt/hybris/"
+	     echo "cp bin"
+             kubectl cp "$tools_folder/bin" "$1:/opt/hybris/"
+	     echo "set env variables and login into bash on following pod: $1"
+	     kubectl exec -ti "$1" -- bash -c "export LD_LIBRARY_PATH='/opt/hybris/lib'; export PATH='$PATH:/opt/hybris/bin'; bash"
+      else
+         echo "you have to define env variable tools_folder, which should point to folder with 'bin' and 'libs'"
+      fi
+fi
