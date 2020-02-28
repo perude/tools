@@ -1,12 +1,17 @@
 # tools
 
 Purpose of this repository is to allow us to execute some diagnostic tools on kubernetes pods.
+Currently this is compliant with mac machines.
 
 # Prerequisites
 
 You have to install:
 - kubernetes client
 - KREW kubernetes plugin 
+> if you have brew it could be installed by
+```
+brew install krew
+```
 
 # Installing
 
